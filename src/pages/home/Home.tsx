@@ -1,10 +1,8 @@
 import React from "react";
 import './home.css';
-import block from '../../assets/block.png'
 import ConnectWallet from "../../components/wallet/Connectwallet";
 import { useEffect, useState } from "react";
 import { VenomConnect } from "venom-connect";
-import { initVenomConnect } from "../../components/wallet/configure";
 
 type Props = {
   venomConnect: VenomConnect | undefined;
@@ -19,6 +17,17 @@ const Home = ({ venomConnect }: Props) => {
     const providerState = await provider?.getProviderState?.();
     return providerState?.permissions.accountInteraction?.address.toString();
   };
+  useEffect(() => {
+    // connect event handler
+    const off = venomConnect?.on("connect", onConnect);
+    if (venomConnect) {
+      checkAuth(venomConnect);
+    }
+    // just an empty callback, cuz we don't need it
+    return () => {
+      off?.();
+    };
+  }, [venomConnect]);
   // Any interaction with venom-wallet (address fetching is included) needs to be authentificated
   const checkAuth = async (_venomConnect: any) => {
     const auth = await _venomConnect?.checkAuth();
@@ -43,17 +52,7 @@ const Home = ({ venomConnect }: Props) => {
       : undefined;
     setAddress(venomWalletAddress);
   };
-  useEffect(() => {
-    // connect event handler
-    const off = venomConnect?.on("connect", onConnect);
-    if (venomConnect) {
-      checkAuth(venomConnect);
-    }
-    // just an empty callback, cuz we don't need it
-    return () => {
-      off?.();
-    };
-  }, [venomConnect]);
+
 
   return (
     <div className="home">
@@ -64,9 +63,9 @@ const Home = ({ venomConnect }: Props) => {
       {address && (
         <header>
           <p>{address}</p>
-          <a className="logout" onClick={onDisconnect}>
+          <p className="logout" onClick={onDisconnect}>
             <img src="img" alt="Log out" />
-          </a>
+          </p>
         </header>
       )}
       <ConnectWallet venomConnect={venomConnect} />
