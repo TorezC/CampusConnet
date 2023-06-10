@@ -17,16 +17,16 @@ const Home = ({ venomConnect }: Props) => {
     return providerState?.permissions.accountInteraction?.address.toString();
   };
   // Any interaction with venom-wallet (address fetching is included) needs to be authentificated
-  const checkAuth = async (_venomConnect: any) => {
-    const auth = await _venomConnect?.checkAuth();
-    if (auth) await getAddress(_venomConnect);
-  };
+  // const checkAuth = async (_venomConnect: any) => {
+  //   const auth = await _venomConnect?.checkAuth();
+  //   if (auth) await getAddress(_venomConnect);
+  // };
   // This handler will be called after venomConnect.login() action
   // connect method returns provider to interact with wallet, so we just store it in state
-  const onConnect = async (provider: any) => {
-    setVenomProvider(provider);
-    await onProviderReady(provider);
-  };
+  // const onConnect = async (provider: any) => {
+  //   setVenomProvider(provider);
+  //   await onProviderReady(provider);
+  // };
   // This handler will be called after venomConnect.disconnect() action
   // By click logout. We need to reset address and balance.
   const onDisconnect = async () => {
@@ -34,12 +34,22 @@ const Home = ({ venomConnect }: Props) => {
     setAddress(undefined);
   };
   // When our provider is ready, we need to get address and balance from.
-  const onProviderReady = async (provider: any) => {
-    const venomWalletAddress = provider ? await getAddress(provider) : undefined;
-    setAddress(venomWalletAddress);
-  };
   useEffect(() => {
     // connect event handler
+    const onProviderReady = async (provider: any) => {
+      const venomWalletAddress = provider ? await getAddress(provider) : undefined;
+      setAddress(venomWalletAddress);
+    };
+    const checkAuth = async (_venomConnect: any) => {
+      const auth = await _venomConnect?.checkAuth();
+      if (auth) await getAddress(_venomConnect);
+    };
+
+    const onConnect = async (provider: any) => {
+      setVenomProvider(provider);
+      await onProviderReady(provider);
+    };
+
     const off = venomConnect?.on('connect', onConnect);
     if (venomConnect) {
       checkAuth(venomConnect);
