@@ -1,0 +1,30 @@
+.home{
+    background-image: linear-gradient(114.77deg,#11a97d 10.22%,#0047ff 106.49%);;
+    height: 100vh;
+    width: 100%;
+}
+.home-content{
+    display: flex;
+    padding: 30px 100px;
+    justify-content: space-between;
+    align-items: center;
+}
+.logo {
+    color: white;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 20px;
+}
+.campuslists, .about{
+    padding: 40px 100px;
+    gap: 20px;
+}
+.campuslist{
+    padding: 20px;
+    border: 1px solid white;
+    border-radius: 20px;
+    list-style: none;
+    
+}
+.about{
+    display: flex;
+}
