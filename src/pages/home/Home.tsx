@@ -76,7 +76,7 @@ const Home = ({ venomConnect }: Props) => {
         {address ? (
           <div>
             {/* <p>{address}</p> */}
-            <h1 className="logout" onClick={onDisconnect}>
+            <h1 className="logout" style={{fontSize: '16px', fontWeight: 'larger'}} onClick={onDisconnect}>
               Disconnect
             </h1>
           </div>
