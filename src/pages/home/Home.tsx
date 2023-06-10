@@ -1,4 +1,4 @@
-import React from "react";
+import c from '../../assets/c.png'
 import './home.css';
 import ConnectWallet from "../../components/wallet/Connectwallet";
 import { useEffect, useState } from "react";
@@ -9,7 +9,6 @@ type Props = {
 };
 
 const Home = ({ venomConnect }: Props) => {
-  // const [venomConnect, setVenomConnect] = useState<VenomConnect | undefined>();
   const [venomProvider, setVenomProvider] = useState<any>();
   const [address, setAddress] = useState();
   // This method allows us to gen a wallet address from inpage provider
@@ -17,17 +16,6 @@ const Home = ({ venomConnect }: Props) => {
     const providerState = await provider?.getProviderState?.();
     return providerState?.permissions.accountInteraction?.address.toString();
   };
-  useEffect(() => {
-    // connect event handler
-    const off = venomConnect?.on("connect", onConnect);
-    if (venomConnect) {
-      checkAuth(venomConnect);
-    }
-    // just an empty callback, cuz we don't need it
-    return () => {
-      off?.();
-    };
-  }, [venomConnect]);
   // Any interaction with venom-wallet (address fetching is included) needs to be authentificated
   const checkAuth = async (_venomConnect: any) => {
     const auth = await _venomConnect?.checkAuth();
@@ -47,35 +35,53 @@ const Home = ({ venomConnect }: Props) => {
   };
   // When our provider is ready, we need to get address and balance from.
   const onProviderReady = async (provider: any) => {
-    const venomWalletAddress = provider
-      ? await getAddress(provider)
-      : undefined;
+    const venomWalletAddress = provider ? await getAddress(provider) : undefined;
     setAddress(venomWalletAddress);
   };
+  useEffect(() => {
+    // connect event handler
+    const off = venomConnect?.on('connect', onConnect);
+    if (venomConnect) {
+      checkAuth(venomConnect);
+    }
+    // just an empty callback, cuz we don't need it
+    return () => {
+      off?.();
+    };
+  }, [venomConnect]);
 
 
   return (
     <div className="home">
       <div className="home-content">
 
-      <h1 className="logo">CampusConnet</h1>
-
-      {address && (
-        <header>
-          <p>{address}</p>
-          <p className="logout" onClick={onDisconnect}>
-            <img src="img" alt="Log out" />
-          </p>
-        </header>
-      )}
-      <ConnectWallet venomConnect={venomConnect} />
-      </div>
-      {/* <div className="about">
-        <div className="story">
-          <p>Let's make payment to any place on campus at easy </p>
+      <h1 className="logo"> <img src={c} width={30} height={30} alt="c" /> CampusConnet</h1>
+      <div className="payment">
+        <div className="send">
+          <h1>Send</h1>
         </div>
-        <img src={block} className="img-fluid" alt="b" width={600} height={500} />
-      </div> */}
+        <div className="send">
+          <h1>Receive</h1>
+        </div>
+        {address ? (
+          <div>
+            {/* <p>{address}</p> */}
+            <h1 className="logout" onClick={onDisconnect}>
+              Disconnect
+            </h1>
+          </div>
+        ):
+        <ConnectWallet venomConnect={venomConnect} />
+        }
+        </div>
+      </div>
+      <div className="about ">
+        <h2 className='about-content'>Spend, receive and send Venom tokens on campuses</h2>
+        <div className="story">
+          <p>Campusconnet is a payment solution connecting campuses.</p>
+        </div>
+        
+      </div>
       <ul className="row campuslists">
         <h6>Campuses on CampusConnet</h6>
         <li className="col-md-4 campuslist">

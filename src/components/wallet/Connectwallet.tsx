@@ -13,12 +13,9 @@ function ConnectWallet({ venomConnect }: Props) {
   };
   return (
     <div>
-      <div >
         <h1 style={{color: "black", fontWeight: 'larger', fontSize: '16px', cursor: 'pointer' }} onClick={login}>
           Connect wallet
         </h1>
-
-      </div>
     </div>
   );
 }
